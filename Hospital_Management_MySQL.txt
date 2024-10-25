@@ -1,0 +1,372 @@
+SCHEMAS
+
+PATIENT TABLE
+CREATE TABLE Patient (
+    Patient_ID INT PRIMARY KEY AUTO_INCREMENT,
+    Name VARCHAR(100),
+    Date_of_Birth DATE,
+    Gender VARCHAR(10),
+    Address VARCHAR(255),
+    Contact_Number VARCHAR(15)
+);
+
+INSERT INTO Patient (Name, Date_of_Birth, Gender, Address, Contact_Number)
+VALUES
+('John Doe', '1985-05-12', 'Male', '123 Main St, Cityville', '555-1234'),
+('Jane Smith', '1990-08-24', 'Female', '456 Oak Ave, Townsville', '555-5678'),
+('Michael Brown', '1982-11-19', 'Male', '789 Pine Rd, Villageburg', '555-8765'),
+('Emily Davis', '1975-03-02', 'Female', '101 Maple St, Hamletville', '555-4321'),
+('Daniel Garcia', '1995-07-15', 'Male', '202 Birch Ln, Cityville', '555-6543'),
+('Laura Wilson', '1989-10-27', 'Female', '303 Cedar St, Townsville', '555-2345');
+
+
+DOCTOR TABLE
+CREATE TABLE Doctor (
+    Doctor_ID INT PRIMARY KEY AUTO_INCREMENT,
+    Name VARCHAR(100),
+    Specialization VARCHAR(100),
+    Contact_Info VARCHAR(100)
+);
+
+INSERT INTO Doctor (Name, Specialization, Contact_Info)
+VALUES
+('Dr. John Johnson', 'Cardiology', '555-9876'),
+('Dr. Emily Brown', 'Pediatrics', '555-4321'),
+('Dr. Daniel Lee', 'Orthopedics', '555-7654'),
+('Dr. Sarah Kim', 'Dermatology', '555-2345'),
+('Dr. David Clark', 'General Medicine', '555-6543');
+
+
+NURSE TABLE
+CREATE TABLE Nurse (
+    Nurse_ID INT PRIMARY KEY AUTO_INCREMENT,
+    Name VARCHAR(100),
+    Department_ID INT,
+    Contact_Info VARCHAR(100),
+    FOREIGN KEY (Department_ID) REFERENCES Department(Department_ID)
+);
+
+INSERT INTO Nurse (Name, Department_ID, Contact_Info)
+VALUES
+('Sarah Green', 1, '555-3456'),
+('Mike Davis', 2, '555-7654');
+
+
+WARD TABLE
+CREATE TABLE Ward (
+    Ward_ID INT PRIMARY KEY AUTO_INCREMENT,
+    Name VARCHAR(100),
+    Capacity INT,
+    Location VARCHAR(100)
+);
+
+INSERT INTO Ward (Name, Capacity, Location)
+VALUES
+('General Ward', 20, 'Floor 1'),
+('ICU', 10, 'Floor 2');
+
+
+
+APPOINTMENT TABLE
+CREATE TABLE Appointment (
+    Appointment_ID INT PRIMARY KEY AUTO_INCREMENT,
+    Patient_ID INT,
+    Doctor_ID INT,
+    Date_and_Time DATETIME,
+    FOREIGN KEY (Patient_ID) REFERENCES Patient(Patient_ID),
+    FOREIGN KEY (Doctor_ID) REFERENCES Doctor(Doctor_ID)
+);
+
+(1, 1, '2024-10-25 10:30:00'),  
+(2, 2, '2024-10-26 09:00:00'),  
+(3, 3, '2024-10-26 11:30:00'),  
+(4, 4, '2024-10-27 12:00:00'),  
+(5, 5, '2024-10-27 02:00:00');
+
+
+
+MEDICALRECORD TABLE
+CREATE TABLE MedicalRecord (
+    Record_ID INT PRIMARY KEY AUTO_INCREMENT,
+    Patient_ID INT,
+    Doctor_ID INT,
+    Date_of_Visit DATE,
+    Diagnosis TEXT,
+    Treatment TEXT,
+    FOREIGN KEY (Patient_ID) REFERENCES Patient(Patient_ID),
+    FOREIGN KEY (Doctor_ID) REFERENCES Doctor(Doctor_ID)
+);
+
+INSERT INTO MedicalRecord (Patient_ID, Doctor_ID, Date_of_Visit, Diagnosis, Treatment)
+VALUES
+(1, 1, '2024-10-25', 'Hypertension', 'Prescribed medication'),
+(2, 2, '2024-10-26', 'Flu', 'Rest and fluids'),
+(3, 3, '2024-10-26', 'Fracture', 'Plaster and rest'),
+(4, 4, '2024-10-27', 'Eczema', 'Topical cream'),  
+(5, 5, '2024-10-27', 'Cold and fever', 'Paracetamol and rest');
+
+
+TABLE
+
+DESCRIBE DOCTOR;
++----------------+--------------+------+-----+---------+----------------+
+| Field          | Type         | Null | Key | Default | Extra          |
++----------------+--------------+------+-----+---------+----------------+
+| Doctor_ID      | int          | NO   | PRI | NULL    | auto_increment |
+| Name           | varchar(100) | YES  |     | NULL    |                |
+| Specialization | varchar(100) | YES  |     | NULL    |                |
+| Contact_Info   | varchar(100) | YES  |     | NULL    |                |
++----------------+--------------+------+-----+---------+----------------+
+
+DESCRIBE PATIENT;
++----------------+--------------+------+-----+---------+----------------+
+| Field          | Type         | Null | Key | Default | Extra          |
++----------------+--------------+------+-----+---------+----------------+
+| Patient_ID     | int          | NO   | PRI | NULL    | auto_increment |
+| Name           | varchar(100) | YES  |     | NULL    |                |
+| Date_of_Birth  | date         | YES  |     | NULL    |                |
+| Gender         | varchar(10)  | YES  |     | NULL    |                |
+| Address        | varchar(255) | YES  |     | NULL    |                |
+| Contact_Number | varchar(15)  | YES  |     | NULL    |                |
++----------------+--------------+------+-----+---------+----------------+
+
+DESCRIBE WARD;
++----------+--------------+------+-----+---------+----------------+
+| Field    | Type         | Null | Key | Default | Extra          |
++----------+--------------+------+-----+---------+----------------+
+| Ward_ID  | int          | NO   | PRI | NULL    | auto_increment |
+| Name     | varchar(100) | YES  |     | NULL    |                |
+| Capacity | int          | YES  |     | NULL    |                |
+| Location | varchar(100) | YES  |     | NULL    |                |
++----------+--------------+------+-----+---------+----------------+
+
+DESCRIBE APPOINTMENT;
++----------------+----------+------+-----+---------+----------------+
+| Field          | Type     | Null | Key | Default | Extra          |
++----------------+----------+------+-----+---------+----------------+
+| Appointment_ID | int      | NO   | PRI | NULL    | auto_increment |
+| Patient_ID     | int      | YES  | MUL | NULL    |                |
+| Doctor_ID      | int      | YES  | MUL | NULL    |                |
+| Date_and_Time  | datetime | YES  |     | NULL    |                |
++----------------+----------+------+-----+---------+----------------+
+
+DESCRIBE MEDICALRECORD;
++---------------+------+------+-----+---------+----------------+
+| Field         | Type | Null | Key | Default | Extra          |
++---------------+------+------+-----+---------+----------------+
+| Record_ID     | int  | NO   | PRI | NULL    | auto_increment |
+| Patient_ID    | int  | YES  | MUL | NULL    |                |
+| Doctor_ID     | int  | YES  | MUL | NULL    |                |
+| Date_of_Visit | date | YES  |     | NULL    |                |
+| Diagnosis     | text | YES  |     | NULL    |                |
+| Treatment     | text | YES  |     | NULL    |                |
++---------------+------+------+-----+---------+----------------+
+
+
+COMMAND
+
+1. Retrieve the names and specialties of all doctors.
+
+SELECT NAME,SPECIALIZATION
+FROM DOCTOR;
++------------------+------------------+
+| NAME             | SPECIALIZATION   |
++------------------+------------------+
+| Dr. John Johnson | Cardiology       |
+| Dr. Emily Brown  | Pediatrics       |
+| Dr. Daniel Lee   | Orthopedics      |
+| Dr. Sarah Kim    | Dermatology      |
+| Dr. David Clark  | General Medicine |
++------------------+------------------+
+
+2.  Retrieve the names and genders of all patients aged                
+30 or older.
+
+SELECT NAME,GENDER
+FROM PATIENT
+WHERE DATEDIFF(CURDATE(),DATE_OF_BIRTH)>=30;
++---------------+--------+
+| NAME          | GENDER |
++---------------+--------+
+| John Doe      | Male   |
+| Jane Smith    | Female |
+| Michael Brown | Male   |
+| Emily Davis   | Female |
+| Daniel Garcia | Male   |
+| Laura Wilson  | Female |
++---------------+--------+
+
+3.Retrieve the names of patients treated by 
+  Dr. John Johnson.
+
+ SELECT P.NAME,D.NAME
+ FROM PATIENT P INNER JOIN MEDICALRECORD M
+ ON P.PATIENT_ID=M.PATIENT_ID
+ INNER JOIN DOCTOR
+ D ON M.DOCTOR_ID = D.DOCTOR_ID
+ WHERE D.NAME="DR. JOHN JOHNSON";
++----------+------------------+
+| NAME     | NAME             |
++----------+------------------+
+| John Doe | Dr. John Johnson |
++----------+------------------+
+
+4. Retrieve the names of doctors who specialize in 
+Pediatrics, ordered alphabetically by name.
+
+SELECT NAME,SPECIALIZATION
+FROM DOCTOR
+WHERE SPECIALIZATION="PEDIATRICS"
+ORDER BY NAME;
++---------------------+----------------+
+| NAME                | SPECIALIZATION |
++---------------------+----------------+
+| Dr. Emily Brown     | Pediatrics     |
+| Dr. James Thompson  | Pediatrics     |
+| Dr. Olivia Green    | Pediatrics     |
+| Dr. Sophia Williams | Pediatrics     |
++---------------------+----------------+
+
+5. Retrieve the total count of patients treated 
+   by each doctor.
+ 
+ SELECT D.NAME,COUNT(*) AS TOTAL_PATIENTS
+ FROM DOCTOR D
+ INNER JOIN
+ MEDICALRECORD M
+ ON D.DOCTOR_ID = M.DOCTOR_ID
+ GROUP BY D.NAME;
++------------------+----------------+
+| NAME             | TOTAL_PATIENTS |
++------------------+----------------+
+| Dr. John Johnson |              1 |
+| Dr. Emily Brown  |              1 |
+| Dr. Daniel Lee   |              1 |
+| Dr. Sarah Kim    |              1 |
+| Dr. David Clark  |              1 |
++------------------+----------------+
+
+
+6. Retrieve the average age of patients, 
+grouped by gender.
+
+SELECT GENDER,
+AVG(DATEDIFF(CURDATE(),DATE_OF_BIRTH)/365) 
+AS AVG_AGE 
+FROM PATIENT 
+GROUP BY GENDER;
++--------+-------------+
+| GENDER | AVG_AGE     |
++--------+-------------+
+| Male   | 36.91233333 |
+| Female | 39.63013333 |
++--------+-------------+
+
+7. Retrieve the names of patients and their 
+corresponding doctors, sorted by patient name.
+
+SELECT P.NAME,D.NAME
+FROM PATIENT P INNER JOIN MEDICALRECORD M
+ON P.PATIENT_ID=M.PATIENT_ID
+INNER JOIN DOCTOR
+D ON M.DOCTOR_ID = D.DOCTOR_ID
+ORDER BY P.NAME;
++---------------+------------------+
+| NAME          | NAME             |
++---------------+------------------+
+| Daniel Garcia | Dr. David Clark  |
+| Emily Davis   | Dr. Sarah Kim    |
+| Jane Smith    | Dr. Emily Brown  |
+| John Doe      | Dr. John Johnson |
+| Michael Brown | Dr. Daniel Lee   |
++---------------+------------------+
+
+
+
+8. Retrieve the names of doctors who have not 
+been assigned any patients.
+
+SELECT D.NAME
+FROM DOCTOR D
+LEFT JOIN MEDICALRECORD M 
+ON 
+D.DOCTOR_ID=M.DOCTOR_ID WHERE
+M.DOCTOR_ID IS NULL;
++---------------------+
+| NAME                |
++---------------------+
+| Dr. Olivia Green    |
+| Dr. Sophia Williams |
+| Dr. James Thompson  |
++---------------------+
+
+9. Retrieve the names of patients who have 
+been treated by more than one doctor.
+
+SELECT P.NAME AS PATIENT_NAME,M.PATIENT_ID,
+COUNT(M.PATIENT_ID) AS CNT FROM PATIENT P 
+INNER JOIN 
+MEDICALRECORD M 
+ON P.PATIENT_ID = M.PATIENT_ID
+GROUP BY M.PATIENT_ID HAVING CNT>1;
++---------------+------------+-----+
+| PATIENT_NAME  | PATIENT_ID | CNT |
++---------------+------------+-----+
+| John Doe      |          1 |   2 |
+| Jane Smith    |          2 |   2 |
+| Michael Brown |          3 |   2 |
++---------------+------------+-----+
+10. Retrieve the names of doctors and patients along with the date they 
+were assigned to each other (assuming there's a "DateAssigned" column 
+in the DoctorPatient table).
+
+SELECT P.NAME AS PATIENT_NAME,D.NAME AS DOCTOR_NAME,
+M.DATE_OF_VISIT FROM PATIENT P 
+INNER JOIN 
+MEDICALRECORD M ON P.PATIENT_ID = M.PATIENT_ID 
+INNER JOIN 
+DOCTOR D ON M.DOCTOR_ID = D.DOCTOR_ID;
++---------------+---------------------+---------------+
+| PATIENT_NAME  | DOCTOR_NAME         | DATE_OF_VISIT |
++---------------+---------------------+---------------+
+| John Doe      | Dr. John Johnson    | 2024-10-25    |
+| John Doe      | Dr. Olivia Green    | 2024-10-28    |
+| Jane Smith    | Dr. Emily Brown     | 2024-10-26    |
+| Jane Smith    | Dr. Sophia Williams | 2024-10-28    |
+| Michael Brown | Dr. Daniel Lee      | 2024-10-26    |
+| Michael Brown | Dr. James Thompson  | 2024-10-28    |
+| Emily Davis   | Dr. Sarah Kim       | 2024-10-27    |
+| Daniel Garcia | Dr. David Clark     | 2024-10-27    |
++---------------+---------------------+---------------+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
